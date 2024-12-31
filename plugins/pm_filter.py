@@ -42,6 +42,7 @@ from database.filters_mdb import (
     find_filter,
     get_filters,
 )
+from lazybot.ffmpeg import add_watermark
 from util.human_readable import humanbytes
 from plugins.settings.settings import OpenSettings
 from plugins.dl_button import ddl_call_back
@@ -2719,6 +2720,15 @@ async def auto_filter(client, msg, spoll=False):
             **locals()
         )
     else:
+        try:
+            watermarked_image_path = f"./wish/{message.from_user.id}/{time.time()}/wish.png"
+            wish_img = await add_watermark(user_id, watermarked_image_path)
+            if wish_img:
+                print(f"Watermarked image saved to: {wish_img}")
+            else:
+                print("Failed to add watermark.")
+        except Exception as e:
+            print(e)
         mention_user = message.from_user.mention
         LAZY_MESSAGES = [
                 "Hello {}, How are you ?",
@@ -2735,7 +2745,7 @@ async def auto_filter(client, msg, spoll=False):
         random_message_template = random.choice(LAZY_MESSAGES)
         set_message = random_message_template.format(mention_user)
 
-        msgg = f"╏╠═[𝍖 H𝙰𝙿𝙿𝚈 𝟸𝟶𝟸𝟻 {message.from_user.mention}𝍖]  💦"
+        msgg = f"𝍖 H𝙰𝙿𝙿𝚈 𝟸𝟶𝟸𝟻 {message.from_user.mention}𝍖"
         cap = f"{msgg}\n\n⚡Baby, Here is what i found for your query {search} 👇\n\n💃 {set_message} ❤"
     if imdb and imdb.get('poster'):
         try:
@@ -2805,7 +2815,8 @@ async def auto_filter(client, msg, spoll=False):
                 await thanksz.delete()       
                 await embracez.delete()       
     else:
-        p = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
+        p = await message.reply_photo(photo=wish_img, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+        # p = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
         
         if SELF_DELETE:
             await asyncio.sleep(SELF_DELETE_SECONDS)
