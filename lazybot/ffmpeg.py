@@ -57,8 +57,9 @@ async def take_screen_shot(video_file, output_directory, ttl):
         return out_put_file_name
     return None
 
-async def add_watermark(image_path, output_path):
+async def add_watermark(user_id, output_path):
     try:
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
         # Download the logo image from the URL
         logo_url = "https://i.ibb.co/2sCD70h/Picsart-24-11-08-15-40-02-118.png"
         response = requests.get(logo_url)
