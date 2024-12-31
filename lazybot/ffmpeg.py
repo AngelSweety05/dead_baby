@@ -57,92 +57,90 @@ async def take_screen_shot(video_file, output_directory, ttl):
         return out_put_file_name
     return None
 
-async def add_watermark(user_id, output_path):
-    try:
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        # Download the logo image from the URL
-        logo_url = "https://i.ibb.co/2sCD70h/Picsart-24-11-08-15-40-02-118.png"
-        response = requests.get(logo_url)
-        logo = Image.open(BytesIO(response.content))
+# async def add_watermark(user_id, output_path):
+#     try:
+#         os.makedirs(os.path.dirname(output_path), exist_ok=True)
+#         # Download the logo image from the URL
 
-        # Open the main image (screenshot)
-        img_url = "https://i.ibb.co/my83BBX/Untitled-design-20241231-134810-0000.png"
-        response = requests.get(img_url)
-        img = Image.open(BytesIO(response.content))
-        # img = Image.open(image_path)
-        img_width, img_height = img.size
 
-        # Set the new logo size as 80% of the image dimensions
-        new_width = int(img_width * 0.6)  # 80% of image width
-        new_height = int(img_height * 0.6)  # 30% of image height
+#         # Open the main image (screenshot)
+#         img_url = "https://i.ibb.co/my83BBX/Untitled-design-20241231-134810-0000.png"
+#         response = requests.get(img_url)
+#         img = Image.open(BytesIO(response.content))
+#         # img = Image.open(image_path)
+#         img_width, img_height = img.size
 
-        # Maintain the aspect ratio of the logo
-        logo_ratio = logo.width / logo.height
-        if new_width / logo_ratio > new_height:
-            new_width = int(new_height * logo_ratio)  # Adjust width to maintain aspect ratio
-        else:
-            new_height = int(new_width / logo_ratio)  # Adjust height to maintain aspect ratio
+#         # Set the new logo size as 80% of the image dimensions
+#         new_width = int(img_width * 0.6)  # 80% of image width
+#         new_height = int(img_height * 0.6)  # 30% of image height
 
-        # Resize the logo
-        logo = logo.resize((new_width, new_height), Image.Resampling.LANCZOS)
+#         # Maintain the aspect ratio of the logo
+#         logo_ratio = logo.width / logo.height
+#         if new_width / logo_ratio > new_height:
+#             new_width = int(new_height * logo_ratio)  # Adjust width to maintain aspect ratio
+#         else:
+#             new_height = int(new_width / logo_ratio)  # Adjust height to maintain aspect ratio
 
-        # Calculate position for the logo (left-bottom corner)
-        x_pos = 20  # Left margin
-        y_pos = img_height - new_height - 10  # Bottom margin
-        # Paste the logo onto the image (with transparency support)
-        img.paste(logo, (x_pos, y_pos), logo)  # The third argument is the mask for transparency
+#         # Resize the logo
+#         logo = logo.resize((new_width, new_height), Image.Resampling.LANCZOS)
 
-        # Add the text watermark
-        draw = ImageDraw.Draw(img)
+#         # Calculate position for the logo (left-bottom corner)
+#         x_pos = 20  # Left margin
+#         y_pos = img_height - new_height - 10  # Bottom margin
+#         # Paste the logo onto the image (with transparency support)
+#         img.paste(logo, (x_pos, y_pos), logo)  # The third argument is the mask for transparency
 
-        # Text properties
-        text = "MoviesAdda"
-        font_size = int(img_width * 0.05)  # Dynamic font size based on image width
-        font = ImageFont.truetype("arial.ttf", font_size)  # Change to your preferred font
-        text_width, text_height = draw.textsize(text, font=font)
+#         # Add the text watermark
+#         draw = ImageDraw.Draw(img)
 
-        # Background properties
-        bg_padding = 20  # Padding around the text
-        bg_x0 = (img_width - text_width) // 2 - bg_padding  # Left edge of the background
-        bg_y0 = img_height - text_height - 30 - bg_padding  # Top edge of the background
-        bg_x1 = bg_x0 + text_width + 2 * bg_padding  # Right edge of the background
-        bg_y1 = bg_y0 + text_height + 2 * bg_padding  # Bottom edge of the background
+#         # Text properties
+#         text = "MoviesAdda"
+#         font_size = int(img_width * 0.05)  # Dynamic font size based on image width
+#         font = ImageFont.truetype("arial.ttf", font_size)  # Change to your preferred font
+#         text_width, text_height = draw.textsize(text, font=font)
 
-        # Draw the black background with rounded corners
-        corner_radius = 20
-        draw.rounded_rectangle([bg_x0, bg_y0, bg_x1, bg_y1], corner_radius, fill="black")
+#         # Background properties
+#         bg_padding = 20  # Padding around the text
+#         bg_x0 = (img_width - text_width) // 2 - bg_padding  # Left edge of the background
+#         bg_y0 = img_height - text_height - 30 - bg_padding  # Top edge of the background
+#         bg_x1 = bg_x0 + text_width + 2 * bg_padding  # Right edge of the background
+#         bg_y1 = bg_y0 + text_height + 2 * bg_padding  # Bottom edge of the background
 
-        # Draw the white border around the background
-        border_thickness = 5
-        draw.rounded_rectangle(
-            [bg_x0 - border_thickness, bg_y0 - border_thickness, bg_x1 + border_thickness, bg_y1 + border_thickness],
-            corner_radius + border_thickness,
-            outline="white",
-            width=border_thickness
-        )
+#         # Draw the black background with rounded corners
+#         corner_radius = 20
+#         draw.rounded_rectangle([bg_x0, bg_y0, bg_x1, bg_y1], corner_radius, fill="black")
 
-        # Add shadow
-        shadow_offset = 5
-        shadow_color = "gray"
-        shadow_rect = [
-            bg_x0 + shadow_offset,
-            bg_y0 + shadow_offset,
-            bg_x1 + shadow_offset,
-            bg_y1 + shadow_offset,
-        ]
-        draw.rounded_rectangle(shadow_rect, corner_radius, fill=shadow_color)
+#         # Draw the white border around the background
+#         border_thickness = 5
+#         draw.rounded_rectangle(
+#             [bg_x0 - border_thickness, bg_y0 - border_thickness, bg_x1 + border_thickness, bg_y1 + border_thickness],
+#             corner_radius + border_thickness,
+#             outline="white",
+#             width=border_thickness
+#         )
 
-        # Add the text over the background
-        text_x = (img_width - text_width) // 2
-        text_y = img_height - text_height - 30
-        draw.text((text_x, text_y), text, font=font, fill="white", align="center")
+#         # Add shadow
+#         shadow_offset = 5
+#         shadow_color = "gray"
+#         shadow_rect = [
+#             bg_x0 + shadow_offset,
+#             bg_y0 + shadow_offset,
+#             bg_x1 + shadow_offset,
+#             bg_y1 + shadow_offset,
+#         ]
+#         draw.rounded_rectangle(shadow_rect, corner_radius, fill=shadow_color)
 
-        # Save the final image
-        img.save(output_path)
-        return output_path
-    except Exception as e:
-        print(f"Error adding watermark: {e}")
-        return None
+#         # Add the text over the background
+#         text_x = (img_width - text_width) // 2
+#         text_y = img_height - text_height - 30
+#         draw.text((text_x, text_y), text, font=font, fill="white", align="center")
+
+#         # Save the final image
+#         img.save(output_path)
+#         return output_path
+#     except Exception as e:
+#         print(f"Error adding watermark: {e}")
+#         return None
 
 
 # async def add_watermark(image_path, output_path):
@@ -183,34 +181,40 @@ async def add_watermark(user_id, output_path):
 #         print(f"Error adding logo watermark: {e}")
 #         return None
 
-# async def add_watermark(image_path, output_path, watermark_text="TEST"):
-#     try:
-#         # Open the image
-#         img = Image.open(image_path)
-#         width, height = img.size
-#         draw = ImageDraw.Draw(img)
+async def add_watermark(name, output_path):
+    try:
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-#         # Use default font (no need to specify a custom font)
-#         font = ImageFont.load_default()
+        # Open the image
+        watermark_text = f"❤ {name} ❤"
+        logo_url = "https://i.ibb.co/VNB60cK/Untitled-design-20241231-135231-0000.png"
+        response = requests.get(logo_url)
+        img = Image.open(BytesIO(response.content))
 
-#         # Calculate text size (bounding box)
-#         bbox = draw.textbbox((0, 0), watermark_text, font=font)
-#         text_width = bbox[2] - bbox[0]
-#         text_height = bbox[3] - bbox[1]
+        width, height = img.size
+        draw = ImageDraw.Draw(img)
 
-#         # Position of watermark (bottom-right corner)
-#         x_pos = width - text_width // 2 # center
-#         y_pos = height - text_height - 10  # 10 pixels from the bottom edge
+        # Use default font (no need to specify a custom font)
+        font = ImageFont.load_default()
 
-#         # Add watermark text to the image
-#         draw.text((x_pos, y_pos), watermark_text, font=font, fill="white")
+        # Calculate text size (bounding box)
+        bbox = draw.textbbox((0, 0), watermark_text, font=font)
+        text_width = bbox[2] - bbox[0]
+        text_height = bbox[3] - bbox[1]
 
-#         # Save the watermarked image
-#         img.save(output_path)
-#         return output_path
-#     except Exception as e:
-#         print(f"Error adding watermark: {e}")
-#         return None
+        # Position of watermark (bottom-right corner)
+        x_pos = width - text_width // 2 # center
+        y_pos = height - text_height - 10  # 10 pixels from the bottom edge
+
+        # Add watermark text to the image
+        draw.text((x_pos, y_pos), watermark_text, font=font, fill="white")
+
+        # Save the watermarked image
+        img.save(output_path)
+        return output_path
+    except Exception as e:
+        print(f"Error adding watermark: {e}")
+        return None
 
 
 
