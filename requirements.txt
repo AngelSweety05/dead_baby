@@ -33,3 +33,5 @@ tldextract
 lk21
 Flask==2.2.2
 
+imageio>=2.5.0 
+Pillow>=7.0.0 
