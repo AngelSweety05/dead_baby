@@ -84,6 +84,31 @@ BUTTONS2 = {}
 #         except Exception as e:
 #             logger.error(f"Chat Not verified : {e}") 
 
+import logging
+import os
+import time
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
+
+async def process_watermark(user_id, message):
+    try:
+        # Construct the watermarked image path
+        watermarked_image_path = f"./wish/{user_id}/{time.time()}/wish.png"
+
+        # Attempt to add watermark
+        wish_img = await add_watermark(user_id, watermarked_image_path)
+        if wish_img:
+            logger.info(f"Watermarked image saved to: {wish_img}")
+        else:
+            logger.warning("Failed to add watermark.")
+        return wish_img
+    except Exception as e:
+        # Log any exceptions with stack trace
+        logger.error(f"Error while processing watermark: {e}", exc_info=True)
+
+
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     k = await manual_filters(client, message)
@@ -2720,15 +2745,16 @@ async def auto_filter(client, msg, spoll=False):
             **locals()
         )
     else:
-        try:
-            watermarked_image_path = f"./wish/{message.from_user.id}/{time.time()}/wish.png"
-            wish_img = await add_watermark(user_id, watermarked_image_path)
-            if wish_img:
-                print(f"Watermarked image saved to: {wish_img}")
-            else:
-                print("Failed to add watermark.")
-        except Exception as e:
-            print(e)
+        # try:
+        #     watermarked_image_path = f"./wish/{message.from_user.id}/{time.time()}/wish.png"
+        #     wish_img = await add_watermark(user_id, watermarked_image_path)
+        #     if wish_img:
+        #         print(f"Watermarked image saved to: {wish_img}")
+        #     else:
+        #         print("Failed to add watermark.")
+        # except Exception as e:
+        #     print(e)
+        wish_img = await process_watermark(message.from_user.id, message)
         mention_user = message.from_user.mention
         LAZY_MESSAGES = [
                 "Hello {}, How are you ?",
