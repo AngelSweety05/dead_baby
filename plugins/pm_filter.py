@@ -98,7 +98,7 @@ async def process_watermark(user_id, message):
         watermarked_image_path = f"./wish/{user_id}/{time.time()}/wish.png"
 
         # Attempt to add watermark
-        wish_img = await add_watermark(user_id, watermarked_image_path)
+        wish_img = await add_watermark(message.from_user.first_name, watermarked_image_path)
         if wish_img:
             logger.info(f"Watermarked image saved to: {wish_img}")
         else:
