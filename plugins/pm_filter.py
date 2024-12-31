@@ -2873,8 +2873,8 @@ async def auto_filter(client, msg, spoll=False):
                 await embracez.delete()       
     else:
         
-        p = await message.reply_photo(photo=WISH_PICS, caption=cap, reply_markup=InlineKeyboardMarkup(btn), has_spoiler=True)
-        # p = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
+        #p = await message.reply_photo(photo=WISH_PICS, caption=cap, reply_markup=InlineKeyboardMarkup(btn), has_spoiler=True)
+        p = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
         
         if SELF_DELETE:
             await asyncio.sleep(SELF_DELETE_SECONDS)
