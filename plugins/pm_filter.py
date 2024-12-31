@@ -42,7 +42,7 @@ from database.filters_mdb import (
     find_filter,
     get_filters,
 )
-from lazybot.ffmpeg import add_watermark
+#from lazybot.ffmpeg import add_watermark
 from util.human_readable import humanbytes
 from plugins.settings.settings import OpenSettings
 from plugins.dl_button import ddl_call_back
@@ -2757,16 +2757,31 @@ async def auto_filter(client, msg, spoll=False):
         # wish_img = await process_watermark(message.from_user.id, message)
         mention_user = message.from_user.mention
         LAZY_MESSAGES = [
-                "Hello {}, How are you ?",
+                "Hello {}, How are you?",
                 "Come soon again please, {}.",
                 "How is your day, {}?",
                 "Good morning, {}.",
-                "I'm Good and what about you , {}.",
+                "I'm Good and what about you, {}?",
                 "Happy to see you, {}.",
                 "Let's catch up soon, {}.",
                 "Have a nice day, {}.",
                 "Take care, {}.",
-                "See you later, {}."
+                "See you later, {}.",
+                "Hope you're doing well, {}!",
+                "Hey {}, it’s great to have you here!",
+                "What’s new with you, {}?",
+                "Wishing you an awesome day, {}!",
+                "Keep smiling, {}.",
+                "Missed you, {}! How’s everything?",
+                "It’s always a pleasure talking to you, {}.",
+                "You make my day brighter, {}.",
+                "Stay safe and sound, {}!",
+                "Can’t wait to hear from you again, {}.",
+                "Cheers to you, {}! Have a lovely day.",
+                "Hope you’re feeling fantastic today, {}!",
+                "Hello there, {}! Always good to see you.",
+                "Take it easy and enjoy your day, {}.",
+                "Sending good vibes your way, {}!"
             ]
         random_message_template = random.choice(LAZY_MESSAGES)
         set_message = random_message_template.format(mention_user)
