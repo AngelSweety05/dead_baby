@@ -92,21 +92,21 @@ import time
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-async def process_watermark(user_id, message):
-    try:
-        # Construct the watermarked image path
-        watermarked_image_path = f"./wish/{user_id}/{time.time()}/wish.png"
+# async def process_watermark(user_id, message):
+#     try:
+#         # Construct the watermarked image path
+#         watermarked_image_path = f"./wish/{user_id}/{time.time()}/wish.png"
 
-        # Attempt to add watermark
-        wish_img = await add_watermark(message.from_user.first_name, watermarked_image_path)
-        if wish_img:
-            logger.info(f"Watermarked image saved to: {wish_img}")
-        else:
-            logger.warning("Failed to add watermark.")
-        return wish_img
-    except Exception as e:
-        # Log any exceptions with stack trace
-        logger.error(f"Error while processing watermark: {e}", exc_info=True)
+#         # Attempt to add watermark
+#         wish_img = await add_watermark(message.from_user.first_name, watermarked_image_path)
+#         if wish_img:
+#             logger.info(f"Watermarked image saved to: {wish_img}")
+#         else:
+#             logger.warning("Failed to add watermark.")
+#         return wish_img
+#     except Exception as e:
+#         # Log any exceptions with stack trace
+#         logger.error(f"Error while processing watermark: {e}", exc_info=True)
 
 
 @Client.on_message(filters.group & filters.text & filters.incoming)
@@ -2754,7 +2754,7 @@ async def auto_filter(client, msg, spoll=False):
         #         print("Failed to add watermark.")
         # except Exception as e:
         #     print(e)
-        wish_img = await process_watermark(message.from_user.id, message)
+        # wish_img = await process_watermark(message.from_user.id, message)
         mention_user = message.from_user.mention
         LAZY_MESSAGES = [
                 "Hello {}, How are you ?",
@@ -2782,17 +2782,33 @@ async def auto_filter(client, msg, spoll=False):
             # set_seconds = list(map(int, LAZY_SECONDS.split()))
             mention_user = message.from_user.mention
             LAZY_MESSAGES = [
-                    "Hello {}, How are you ?",
-                    "Come soon again please, {}.",
-                    "How is your day, {}?",
-                    "Good morning, {}.",
-                    "I'm Good and what about you , {}.",
-                    "Happy to see you, {}.",
-                    "Let's catch up soon, {}.",
-                    "Have a nice day, {}.",
-                    "Take care, {}.",
-                    "See you later, {}."
-                ]
+                "Hello {}, How are you?",
+                "Come soon again please, {}.",
+                "How is your day, {}?",
+                "Good morning, {}.",
+                "I'm Good and what about you, {}?",
+                "Happy to see you, {}.",
+                "Let's catch up soon, {}.",
+                "Have a nice day, {}.",
+                "Take care, {}.",
+                "See you later, {}.",
+                "Hope you're doing well, {}!",
+                "Hey {}, it’s great to have you here!",
+                "What’s new with you, {}?",
+                "Wishing you an awesome day, {}!",
+                "Keep smiling, {}.",
+                "Missed you, {}! How’s everything?",
+                "It’s always a pleasure talking to you, {}.",
+                "You make my day brighter, {}.",
+                "Stay safe and sound, {}!",
+                "Can’t wait to hear from you again, {}.",
+                "Cheers to you, {}! Have a lovely day.",
+                "Hope you’re feeling fantastic today, {}!",
+                "Hello there, {}! Always good to see you.",
+                "Take it easy and enjoy your day, {}.",
+                "Sending good vibes your way, {}!"
+            ]
+
             random_message_template = random.choice(LAZY_MESSAGES)
             set_message = random_message_template.format(mention_user) 
         except Exception as e:
@@ -2841,7 +2857,8 @@ async def auto_filter(client, msg, spoll=False):
                 await thanksz.delete()       
                 await embracez.delete()       
     else:
-        p = await message.reply_photo(photo=wish_img, caption=cap, reply_markup=InlineKeyboardMarkup(btn))
+        
+        p = await message.reply_photo(photo=WISH_PICS, caption=cap, reply_markup=InlineKeyboardMarkup(btn), has_spoiler=True)
         # p = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
         
         if SELF_DELETE:
