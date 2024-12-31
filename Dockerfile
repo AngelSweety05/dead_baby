@@ -1,19 +1,19 @@
 FROM python:3.8-slim-buster
 
-RUN apt update && apt upgrade -y
-RUN apt install git -y
-COPY requirements.txt /requirements.txt
-
-RUN cd /
-# Install ffmpeg and other dependencies
-RUN apt-get update && apt-get install -y \
+# Update and install necessary packages
+RUN apt update && apt upgrade -y && apt install -y \
     ffmpeg \
     git \
     python3-pip \
-    && apt-get clean
-    
-RUN pip3 install -U pip && pip3 install -U -r requirements.txt
+    && apt clean
+
+# Copy requirements file and install Python dependencies
+COPY requirements.txt /requirements.txt
+RUN pip3 install --no-cache-dir -U pip && pip3 install --no-cache-dir -r /requirements.txt
+
+# Create and set the working directory
 RUN mkdir /LazyPrincess
 WORKDIR /LazyPrincess
-COPY start.sh /start.sh
-CMD ["/bin/bash", "/start.sh"]
+
+# Command to run the bot
+CMD ["python3", "bot.py"]
