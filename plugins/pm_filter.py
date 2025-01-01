@@ -2874,9 +2874,10 @@ async def auto_filter(client, msg, spoll=False):
                 await thanksz.delete()       
                 await embracez.delete()       
     else:
-        selected_pic = random.choice(WISH_PICS)
-        print("Selected photo URL:", selected_pic)
-        p = await message.reply_photo(photo=selected_pic, caption=cap, reply_markup=InlineKeyboardMarkup(btn), has_spoiler=True)
+        WSHPCS = "https://i.ibb.co/VNB60cK/Untitled-design-20241231-135231-0000.png"
+        # selected_pic = random.choice(WSHPCS)
+        # print("Selected photo URL:", selected_pic)
+        p = await message.reply_photo(photo=WSHPCS, caption=cap, reply_markup=InlineKeyboardMarkup(btn), has_spoiler=True)
         # p = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
         
         if SELF_DELETE:
