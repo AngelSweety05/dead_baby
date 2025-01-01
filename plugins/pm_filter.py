@@ -42,7 +42,7 @@ from database.filters_mdb import (
     find_filter,
     get_filters,
 )
-from lazybot.ffmpeg import add_watermark
+# from lazybot.ffmpeg import add_watermark
 from util.human_readable import humanbytes
 from plugins.settings.settings import OpenSettings
 from plugins.dl_button import ddl_call_back
