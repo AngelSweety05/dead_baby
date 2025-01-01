@@ -42,7 +42,7 @@ from database.filters_mdb import (
     find_filter,
     get_filters,
 )
-#from lazybot.ffmpeg import add_watermark
+from lazybot.ffmpeg import add_watermark
 from util.human_readable import humanbytes
 from plugins.settings.settings import OpenSettings
 from plugins.dl_button import ddl_call_back
@@ -108,12 +108,14 @@ logger = logging.getLogger(__name__)
 #         # Log any exceptions with stack trace
 #         logger.error(f"Error while processing watermark: {e}", exc_info=True)
 
-
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     k = await manual_filters(client, message)
     if k == False:
-        await auto_filter(client, message)
+        try:
+            await auto_filter(client, message)
+        except Exception as e:
+            print(f"ERROR: {e}")
 
 @Client.on_callback_query(filters.regex('rename'))
 async def rename(bot,update):
@@ -123,7 +125,7 @@ async def rename(bot,update):
 	await update.message.reply_text("»»——— 𝙋𝙡𝙚𝙖𝙨𝙚 𝙚𝙣𝙩𝙚𝙧 𝙣𝙚𝙬 𝙛𝙞𝙡𝙚 𝙣𝙖𝙢𝙚...",	
 	reply_to_message_id=update.message.reply_to_message.id,  
 	reply_markup=ForceReply(True))  
-    
+
 # Born to make history @LazyDeveloper !
 @Client.on_callback_query(filters.regex("upload"))
 async def doc(bot, update):
@@ -2783,10 +2785,11 @@ async def auto_filter(client, msg, spoll=False):
                 "Take it easy and enjoy your day, {}.",
                 "Sending good vibes your way, {}!"
             ]
+
         random_message_template = random.choice(LAZY_MESSAGES)
         set_message = random_message_template.format(mention_user)
 
-        msgg = f"𝍖 H𝙰𝙿𝙿𝚈 𝟸𝟶𝟸𝟻 {message.from_user.mention}𝍖"
+        msgg = f"𝍖 H𝙰𝙿𝙿𝚈 𝟸𝟶𝟸𝟻 {message.from_user.mention} 𝍖"
         cap = f"{msgg}\n\n⚡Baby, Here is what i found for your query {search} 👇\n\n💃 {set_message} ❤"
     if imdb and imdb.get('poster'):
         try:
@@ -2795,37 +2798,37 @@ async def auto_filter(client, msg, spoll=False):
             splitt_seconds = list(map(int, TEST_SEC.split()))
             set_seconds = random.choice(splitt_seconds)
             # set_seconds = list(map(int, LAZY_SECONDS.split()))
-            mention_user = message.from_user.mention
-            LAZY_MESSAGES = [
-                "Hello {}, How are you?",
-                "Come soon again please, {}.",
-                "How is your day, {}?",
-                "Good morning, {}.",
-                "I'm Good and what about you, {}?",
-                "Happy to see you, {}.",
-                "Let's catch up soon, {}.",
-                "Have a nice day, {}.",
-                "Take care, {}.",
-                "See you later, {}.",
-                "Hope you're doing well, {}!",
-                "Hey {}, it’s great to have you here!",
-                "What’s new with you, {}?",
-                "Wishing you an awesome day, {}!",
-                "Keep smiling, {}.",
-                "Missed you, {}! How’s everything?",
-                "It’s always a pleasure talking to you, {}.",
-                "You make my day brighter, {}.",
-                "Stay safe and sound, {}!",
-                "Can’t wait to hear from you again, {}.",
-                "Cheers to you, {}! Have a lovely day.",
-                "Hope you’re feeling fantastic today, {}!",
-                "Hello there, {}! Always good to see you.",
-                "Take it easy and enjoy your day, {}.",
-                "Sending good vibes your way, {}!"
-            ]
+            # mention_user = message.from_user.mention
+            # LAZY_MESSAGES = [
+            #     "Hello {}, How are you?",
+            #     "Come soon again please, {}.",
+            #     "How is your day, {}?",
+            #     "Good morning, {}.",
+            #     "I'm Good and what about you, {}?",
+            #     "Happy to see you, {}.",
+            #     "Let's catch up soon, {}.",
+            #     "Have a nice day, {}.",
+            #     "Take care, {}.",
+            #     "See you later, {}.",
+            #     "Hope you're doing well, {}!",
+            #     "Hey {}, it’s great to have you here!",
+            #     "What’s new with you, {}?",
+            #     "Wishing you an awesome day, {}!",
+            #     "Keep smiling, {}.",
+            #     "Missed you, {}! How’s everything?",
+            #     "It’s always a pleasure talking to you, {}.",
+            #     "You make my day brighter, {}.",
+            #     "Stay safe and sound, {}!",
+            #     "Can’t wait to hear from you again, {}.",
+            #     "Cheers to you, {}! Have a lovely day.",
+            #     "Hope you’re feeling fantastic today, {}!",
+            #     "Hello there, {}! Always good to see you.",
+            #     "Take it easy and enjoy your day, {}.",
+            #     "Sending good vibes your way, {}!"
+            # ]
 
-            random_message_template = random.choice(LAZY_MESSAGES)
-            set_message = random_message_template.format(mention_user) 
+            # random_message_template = random.choice(LAZY_MESSAGES)
+            # set_message = random_message_template.format(mention_user) 
         except Exception as e:
             print(e)
             pass
@@ -2858,7 +2861,6 @@ async def auto_filter(client, msg, spoll=False):
                 await asyncio.sleep(33)
                 await thanks.delete()
                 await embrace.delete()
-
         except Exception as e:
             logger.exception(e)
             n = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
@@ -2873,8 +2875,8 @@ async def auto_filter(client, msg, spoll=False):
                 await embracez.delete()       
     else:
         
-        #p = await message.reply_photo(photo=WISH_PICS, caption=cap, reply_markup=InlineKeyboardMarkup(btn), has_spoiler=True)
-        p = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
+        p = await message.reply_photo(photo=WISH_PICS, caption=cap, reply_markup=InlineKeyboardMarkup(btn), has_spoiler=True)
+        # p = await message.reply_text(cap, reply_markup=InlineKeyboardMarkup(btn))
         
         if SELF_DELETE:
             await asyncio.sleep(SELF_DELETE_SECONDS)
